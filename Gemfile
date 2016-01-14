@@ -5,6 +5,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.0'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
+gem 'instagram'
 gem 'httparty'
 gem 'rest-client', '~> 1.8'
 # Use SCSS for stylesheets
