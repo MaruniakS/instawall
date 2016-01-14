@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   get 'home/connect'
   get 'home/callback'
   get 'home/nav'
-  get 'home/media_popular'
+  get 'home/tags'
   get 'home/nav'
 
   post 'home/connect'

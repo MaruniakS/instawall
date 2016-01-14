@@ -21,9 +21,10 @@ class HomeController < ApplicationController
   def nav
   end
 
-  def media_popular
+  def tags
     client = Instagram.client(:access_token => session[:access_token])
-    @photos = client.media_popular
+    @tags = client.tag_search('rest')
+    @media = client.tag_recent_media(@tags[0].name)
   end
 end
 
