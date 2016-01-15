@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users , :controllers => { omniauth_callbacks: 'omniauth_callbacks' }
   get 'home/index'
   get 'home/connect'
   get 'home/callback'

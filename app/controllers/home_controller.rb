@@ -1,7 +1,7 @@
 class HomeController < ApplicationController
   require 'rest_client'
   require 'json'
-
+  before_action :authenticate_user!
   def index
   end
 
