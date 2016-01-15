@@ -19,9 +19,7 @@
       <% if user_signed_in? %>
           <li> <p class='nav navbar-text'>Logged as <strong><%= Identity.find_by_user_id(current_user.id).nickname %></strong>.</p></li>
           <li>
-            <%= link_to edit_user_registration_path do %>
-                <span class="glyphicon glyphicon-wrench"></span> Edit profile
-            <% end %>
+            <%= image_tag  Identity.find_by_user_id(current_user.id).image, :class => 'img-circle', :size => '50x50'%>
           </li>
           <li>
             <%= link_to destroy_user_session_path, :method => :delete do %>
@@ -30,13 +28,8 @@
           </li>
       <% else %>
           <li>
-            <%= link_to  new_user_registration_path, {class: 'btn-default'} do  %>
-                <span class="glyphicon glyphicon-user"></span> Sign Up
-            <% end %>
-          </li>
-          <li>
-            <%= link_to  new_user_session_path, {class: 'btn-default'} do %>
-                <span class="glyphicon glyphicon-log-in"></span> Login
+            <%= link_to  omniauth_authorize_path(resource_name, 'instagram'), {class: 'btn-default'} do %>
+                <span class="glyphicon glyphicon-log-in"></span> Login with Instagram
             <% end %>
           </li>
       <% end %>
