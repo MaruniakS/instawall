@@ -17,7 +17,7 @@
     </ul>
     <ul class="nav navbar-nav navbar-right">
       <% if user_signed_in? %>
-          <li> <p class='nav navbar-text'>Logged as <strong><%= current_user.nickname %></strong>.</p></li>
+          <li> <p class='nav navbar-text'>Logged as <strong><%= current_user.nickname %></strong></p></li>
           <li>
             <%= image_tag  current_user.image, :class => 'img-circle', :size => '50x50'%>
           </li>
