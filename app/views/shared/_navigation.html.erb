@@ -17,9 +17,9 @@
     </ul>
     <ul class="nav navbar-nav navbar-right">
       <% if user_signed_in? %>
-          <li> <p class='nav navbar-text'>Logged as <strong><%= Identity.find_by_user_id(current_user.id).nickname %></strong>.</p></li>
+          <li> <p class='nav navbar-text'>Logged as <strong><%= current_user.nickname %></strong>.</p></li>
           <li>
-            <%= image_tag  Identity.find_by_user_id(current_user.id).image, :class => 'img-circle', :size => '50x50'%>
+            <%= image_tag  current_user.image, :class => 'img-circle', :size => '50x50'%>
           </li>
           <li>
             <%= link_to destroy_user_session_path, :method => :delete do %>
@@ -28,7 +28,7 @@
           </li>
       <% else %>
           <li>
-            <%= link_to  omniauth_authorize_path(resource_name, 'instagram'), {class: 'btn-default'} do %>
+            <%= link_to  user_omniauth_authorize_path(:instagram), {class: 'btn-default'} do %>
                 <span class="glyphicon glyphicon-log-in"></span> Login with Instagram
             <% end %>
           </li>
