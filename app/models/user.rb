@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  has_many :hashtags, through: :user_hashtags
+  has_many :user_hashtags
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :omniauthable, :database_authenticatable, :registerable,

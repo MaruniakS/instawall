@@ -18,11 +18,11 @@
 
         </h3>
       </div>
-      <div class = "panel-body" id = "main-panel">
-        <%= form_for :person do |f| %>
+      <div class = "panel-body" id = "search-panel">
+        <%= form_for :hashtag do |f| %>
             <div class="form-group">
               <div class="input-group">
-                <%= f.text_field :first_name, class: 'form-control', placeholder: 'Hashtags' %>
+                <%= f.text_field :hash, class: 'form-control', placeholder: 'Hashtags' %>
                     <span class="input-group-btn">
                      <%= f.submit 'Find', class: 'btn btn-primary', style: 'float: right' %>
                     </span>
@@ -37,11 +37,31 @@
     <div class = "panel panel-info">
       <div class = "panel-heading">
         <h3 class = "panel-title">
-          Your hashtags history
+          <% if user_signed_in? %>
+            Your hashtags history
+          <% else %>
+            Popular hashtags
+          <% end %>
         </h3>
       </div>
-      <div class = "panel-body" id = "main-panel">
-
+      <div class = "panel-body" id="history-panel">
+        <% if user_signed_in? %>
+            <ul>
+              <% current_user.hashtags.order(:count => :desc).each do |h| %>
+                <li>
+                  <%= h.hash %>
+                </li>
+              <% end %>
+            </ul>
+        <% else %>
+            <ul>
+              <% Hashtag.order(:count => :desc).each do |h| %>
+                  <li>
+                    <%= h.hash %>
+                  </li>
+              <% end %>
+            </ul>
+        <% end %>
       </div>
     </div>
 
