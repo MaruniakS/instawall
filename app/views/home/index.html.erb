@@ -6,7 +6,7 @@
           Photos
         </h3>
       </div>
-      <div class = "panel-body" id = "main-panel">
+      <div class = "panel-body" id = "photos-panel">
       </div>
     </div>
   </div>
@@ -19,17 +19,15 @@
         </h3>
       </div>
       <div class = "panel-body" id = "search-panel">
-        <%= form_for :hashtag do |f| %>
-            <div class="form-group">
-              <div class="input-group">
-                <%= f.text_field :hash, class: 'form-control', placeholder: 'Hashtags' %>
-                    <span class="input-group-btn">
-                     <%= f.submit 'Find', class: 'btn btn-primary', style: 'float: right' %>
-                    </span>
+         <div class="form-group">
+           <div class="input-group">
+             <input type="text" class = "form-control", placeholder="Hashtags"/>
+                <span class="input-group-btn">
+                  <input value="Find" type="button" class="btn btn-primary" style = "float: right" />
+                 </span>
               </div>
-              <span class="help-block">Enter one or more hashtags</span>
-            </div>
-        <% end %>
+            <span class="help-block">Enter one or more hashtags</span>
+         </div>
       </div>
     </div>
 
