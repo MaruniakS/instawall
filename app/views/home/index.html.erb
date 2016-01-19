@@ -45,17 +45,17 @@
       <div class = "panel-body" id="history-panel">
         <% if user_signed_in? %>
             <ul>
-              <% current_user.hashtags.order(:count => :desc).each do |h| %>
+              <% current_user.tags.order(:created_at => :desc).each do |h| %>
                 <li>
-                  <%= h.hash %>
+                  <%= h.name %>
                 </li>
               <% end %>
             </ul>
         <% else %>
             <ul>
-              <% Hashtag.order(:count => :desc).each do |h| %>
+              <% Tag.order(:count => :desc).each do |h| %>
                   <li>
-                    <%= h.hash %>
+                    <%= h.name %>
                   </li>
               <% end %>
             </ul>

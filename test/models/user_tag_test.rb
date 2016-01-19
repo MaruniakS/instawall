@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class UserHashtagTest < ActiveSupport::TestCase
+class UserTagTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
