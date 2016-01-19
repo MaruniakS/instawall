@@ -1,7 +1,4 @@
 class HomeController < ApplicationController
-  require 'rest_client'
-  require 'json'
-
   def index
 
   end
@@ -11,25 +8,35 @@ class HomeController < ApplicationController
     hash_tags = str.split(/[# ]/).reject(&:empty?) #hashtags in array without #
     save_tags(hash_tags)
     tags = current_user.instagram_client.tag_search(hash_tags[0])
-    media = current_user.instagram_client.tag_recent_media(tags[0].name)
+    media = current_user.instagram_client.tag_recent_media(tags[0].name, count: 5)
     result = {
         'hash_tags' => hash_tags,
         'pagination' => media.pagination,
+        'meta' => media.meta,
         'photos' => media
     }
     render json: result
   end
 
   def load_more
-
+    tag = params[:tag]
+    min_tag_id = params[:min_tag_id]
+    media = current_user.instagram_client.tag_recent_media(tag, count: 5)
+    result = {
+        'pagination' => media.pagination,
+        'meta' => media.meta,
+        'photos' => media
+    }
+    render json: result
   end
 
   def tmp
     hash_tags = ['nature']
-    media = current_user.instagram_client.tag_recent_media(hash_tags[0])
+    media = current_user.instagram_client.tag_recent_media(hash_tags[0], count: 20)
     result = {
         'hash_tags' => hash_tags,
         'pagination' => media.pagination,
+        'meta' => media.meta,
         'data' => media
     }
     render json: result
