@@ -28,7 +28,8 @@ $(document).ready(function(){
             ajax_url = "http://localhost:3000/home/get_photos?tag="+hash_tags[0]+"&max_id="+pagination['next_max_id'];
         }
         if (!$('#loading').length){
-            $('#photos-panel').append($('<div>', {id: 'loading', text: 'Loading...', style: "margin-top: 20px"}));
+            $('#photos-panel').append('<img id="loading" src="<%= asset_path('loading.gif') %>"/>');
+            //$('#photos-panel').append($('<div>', {id: 'loading', text: 'Loading...', style: "margin-top: 20px"}));
         }
         $.ajax({
             url: ajax_url,
@@ -50,7 +51,7 @@ $(document).ready(function(){
        photos_id_array = [];
        var tags_string = $('#hash-input').val();
        hash_tags = tags_string.split(/[# ]/).filter(Boolean);
-       //$('#photos-panel').append($('<img>', {src: "../../../public/loading.gif"}));
+
        doAjax("get");
    });
 

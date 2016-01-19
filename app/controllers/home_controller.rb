@@ -1,4 +1,5 @@
 class HomeController < ApplicationController
+
   def index
   end
 
@@ -41,6 +42,10 @@ class HomeController < ApplicationController
         tag.count += 1
         tag.save!
       end
+  end
+
+  def auth
+    redirect_to user_omniauth_authorize_path(:instagram)
   end
 
 end
