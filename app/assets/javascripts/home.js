@@ -1,6 +1,7 @@
 $(document).ready(function(){
     var hash_tags = [];
     var pagination = "";
+    var photos_id_array = [];
     function appendPhotos(data){
         if ('hash_tags' in data){
             hash_tags = data['hash_tags'];
@@ -8,9 +9,12 @@ $(document).ready(function(){
         pagination = data['pagination'];
         data = data['photos'];
         for (var i = 0; i < data.length; i++){
-            $('#photos-panel').append(
-                $('<img>', {class: "img-thumbnail photos",src: data[i]['images']['standard_resolution']['url']} )
-            );
+            if ($.inArray(data[i]['caption']['id'], photos_id_array) === -1) {
+                photos_id_array.push(data[i]['caption']['id']);
+                $('#photos-panel').append(
+                    $('<img>', {class: "img-thumbnail photos", src: data[i]['images']['standard_resolution']['url']})
+                );
+            }
         }
     }
 
@@ -43,6 +47,7 @@ $(document).ready(function(){
 
    $('#srch-btn').click(function(){
        $('#photos-panel').html("");
+       photos_id_array = [];
        var tags_string = $('#hash-input').val();
        hash_tags = tags_string.split(/[# ]/).filter(Boolean);
        //$('#photos-panel').append($('<img>', {src: "../../../public/loading.gif"}));
