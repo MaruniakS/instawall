@@ -20,19 +20,20 @@ class HomeController < ApplicationController
 
   def load_more
     tag = params[:tag]
-    min_tag_id = params[:min_tag_id]
-    media = current_user.instagram_client.tag_recent_media(tag, count: 5)
+    max_id = params[:max_id]
+    media = current_user.instagram_client.tag_recent_media(tag, count: 5, max_id: max_id)
     result = {
         'pagination' => media.pagination,
         'meta' => media.meta,
         'photos' => media
     }
+
     render json: result
   end
 
   def tmp
     hash_tags = ['nature']
-    media = current_user.instagram_client.tag_recent_media(hash_tags[0], count: 20)
+    media = current_user.instagram_client.tag_recent_media(hash_tags[0], count: 5)
     result = {
         'hash_tags' => hash_tags,
         'pagination' => media.pagination,
