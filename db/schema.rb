@@ -14,8 +14,8 @@
 ActiveRecord::Schema.define(version: 20160117170038) do
 
   create_table "hashtags", force: :cascade do |t|
-    t.string   "hash"
-    t.integer  "count",      default: 0
+    t.string   "tag_name"
+    t.integer  "count",      default: 1
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end

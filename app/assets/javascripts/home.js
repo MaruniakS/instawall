@@ -8,7 +8,7 @@ $(document).ready(function(){
                $('#photos-panel').html("");
                for (var i = 0; i < data.length; i++){
                     $('#photos-panel').append(
-                        $('<img>', {src: data[i]['images']['standard_resolution']['url']} )
+                        $('<img>', {class: "img-thumbnail photos",src: data[i]['images']['standard_resolution']['url']} )
                     );
                }
            },
