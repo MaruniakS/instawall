@@ -15,9 +15,11 @@ $(document).ready(function(){
     }
    $('#srch-btn').click(function(){
        $('#photos-panel').html("Loading...");
+       var tags_string = $('#hash-input').val();
+       hash_tags = tags_string.split(/[# ]/).filter(Boolean);
        //$('#photos-panel').append($('<img>', {src: "../../../public/loading.gif"}));
        $.ajax({
-           url: "http://localhost:3000/home/photos_by_tags?tag="+$('#hash-input').val(),
+           url: "http://localhost:3000/home/get_photos?tag="+hash_tags[0],
            dataType: 'json',
            success: function(data){
                $('#photos-panel').html("");
@@ -39,7 +41,7 @@ $(document).ready(function(){
                     $('#photos-panel').append($('<div>', {id: 'loading', text: 'Loading...', style: "margin-top: 20px"}));
                 }
                 $.ajax({
-                    url: "http://localhost:3000/home/load_more?tag="+hash_tags[0]+"&max_id="+pagination['next_max_id'],
+                    url: "http://localhost:3000/home/get_photos?tag="+hash_tags[0]+"&max_id="+pagination['next_max_id'],
                     dataType: 'json',
                     success: function(data)
                     {
