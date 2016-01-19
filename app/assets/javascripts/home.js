@@ -13,23 +13,40 @@ $(document).ready(function(){
             );
         }
     }
+
+    function doAjax(type){
+        var ajax_url = "";
+        if (type === "get"){
+            ajax_url = "http://localhost:3000/home/get_photos?tag="+hash_tags[0];
+        }
+        else
+        {
+            ajax_url = "http://localhost:3000/home/get_photos?tag="+hash_tags[0]+"&max_id="+pagination['next_max_id'];
+        }
+        if (!$('#loading').length){
+            $('#photos-panel').append($('<div>', {id: 'loading', text: 'Loading...', style: "margin-top: 20px"}));
+        }
+        $.ajax({
+            url: ajax_url,
+            dataType: 'json',
+            success: function(data){
+                $('#loading').remove();
+                if (type === "get") {$('#photos-panel').append($('<h3>', {text: '#'+hash_tags[0], class: 'text-info', style: 'margin-top:20px'}));}
+                appendPhotos(data);
+            },
+            error: function(err){
+                $('#photos-panel').html("Something went wrong: " + err);
+            }
+
+        });
+    }
+
    $('#srch-btn').click(function(){
-       $('#photos-panel').html("Loading...");
+       $('#photos-panel').html("");
        var tags_string = $('#hash-input').val();
        hash_tags = tags_string.split(/[# ]/).filter(Boolean);
        //$('#photos-panel').append($('<img>', {src: "../../../public/loading.gif"}));
-       $.ajax({
-           url: "http://localhost:3000/home/get_photos?tag="+hash_tags[0],
-           dataType: 'json',
-           success: function(data){
-               $('#photos-panel').html("");
-                appendPhotos(data);
-           },
-           error: function(err){
-               $('#photos-panel').html("Something went wrong: " + err);
-           }
-
-       });
+       doAjax("get");
    });
 
     $(window).scroll(function()
@@ -37,28 +54,14 @@ $(document).ready(function(){
         if($(window).scrollTop() == $(document).height() - $(window).height())
         {
             if ('next_max_id' in pagination){
-                if (!$('#loading').length){
-                    $('#photos-panel').append($('<div>', {id: 'loading', text: 'Loading...', style: "margin-top: 20px"}));
-                }
-                $.ajax({
-                    url: "http://localhost:3000/home/get_photos?tag="+hash_tags[0]+"&max_id="+pagination['next_max_id'],
-                    dataType: 'json',
-                    success: function(data)
-                    {
-                        $('#loading').remove();
-                        appendPhotos(data);
-
-                    },
-                    error: function(err){
-                        $('#photos-panel').append("Something went wrong: " + err);
-                    }
-                });
+                doAjax("load");
             }
-            else{
+            else if (hash_tags.length > 1){
                 hash_tags.shift();
-                if (hash_tags.count === 0){
-                    alert("hello");
-                }
+                doAjax("get");
+            }
+            else {
+
             }
 
         }

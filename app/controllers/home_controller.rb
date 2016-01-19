@@ -1,6 +1,5 @@
 class HomeController < ApplicationController
   def index
-
   end
 
   def get_photos
@@ -12,7 +11,6 @@ class HomeController < ApplicationController
     else
       media = current_user.instagram_client.tag_recent_media(tag_name, count: 5, max_id: max_id)
     end
-
     result = {
         'pagination' => media.pagination,
         'meta' => media.meta,
@@ -23,7 +21,7 @@ class HomeController < ApplicationController
 
   def tmp
     hash_tags = ['nature']
-    media = current_user.instagram_client.tag_recent_media(hash_tags[0], count: 5)
+    media = current_user.instagram_client.tag_recent_media(hash_tags[0], count: 20)
     result = {
         'hash_tags' => hash_tags,
         'pagination' => media.pagination,
