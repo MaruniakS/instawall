@@ -40,7 +40,7 @@
             </div>
             <div class = "panel-body" id="user-history-panel">
                 <ul>
-                    <% current_user.tags.order(:created_at => :desc).each do |h| %>
+                    <% current_user.tags.order(:updated_at => :desc).each do |h| %>
                         <li >
                             <button class="btn btn-link btn-tag" style="padding: 0px">
                                 <%=  h.name %>
