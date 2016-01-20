@@ -21,7 +21,7 @@ class HomeController < ApplicationController
   end
 
   def tmp
-    hash_tags = ['nature']
+    hash_tags = ['nat']
     media = current_user.instagram_client.tag_recent_media(hash_tags[0], count: 20)
     result = {
         'hash_tags' => hash_tags,

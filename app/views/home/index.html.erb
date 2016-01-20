@@ -46,17 +46,19 @@
         <% if user_signed_in? %>
             <ul>
               <% current_user.tags.order(:created_at => :desc).each do |h| %>
-                <li>
-                  <%= h.name %>
+                <li >
+                  <button class="btn btn-link btn-tag" style="padding: 0px">
+                     <%=  h.name %>
+                  </button>
                 </li>
               <% end %>
             </ul>
         <% else %>
             <ul>
               <% Tag.order(:count => :desc).each do |h| %>
-                  <li>
-                    <%= h.name %>
-                  </li>
+                  <a class="btn-tag">
+                    <%=  h.name %>
+                  </a>
               <% end %>
             </ul>
         <% end %>

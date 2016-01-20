@@ -8,6 +8,9 @@ $(document).ready(function(){
         }
         pagination = data['pagination'];
         data = data['photos'];
+        if (data.length < 1){
+            $('#photos-panel').append($('<div>', {class: 'text-info', text: 'No photos'}));
+        }
         for (var i = 0; i < data.length; i++){
             if ($.inArray(data[i]['caption']['id'], photos_id_array) === -1) {
                 photos_id_array.push(data[i]['caption']['id']);
@@ -39,8 +42,8 @@ $(document).ready(function(){
                 if (type === "get") {$('#photos-panel').append($('<h3>', {text: '#'+hash_tags[0], class: 'text-info', style: 'margin-top:20px'}));}
                 appendPhotos(data);
             },
-            error: function(err){
-                $('#photos-panel').html("Something went wrong: " + err);
+            error: function(){
+                $('#photos-panel').html($('<div>', { text: "Something went wrong. Wrong hashtag! ", class: "alert alert-danger"}));
             }
 
         });
@@ -51,9 +54,14 @@ $(document).ready(function(){
        photos_id_array = [];
        var tags_string = $('#hash-input').val();
        hash_tags = tags_string.split(/[# ]/).filter(Boolean);
-
        doAjax("get");
    });
+
+    $('.btn-tag').click(function(){
+        $('#photos-panel').html("");
+        hash_tags = [$.trim($(this).text())];//.split(/[# ]/).filter(Boolean);
+        doAjax("get");
+    });
 
     $(window).scroll(function()
     {
@@ -67,7 +75,6 @@ $(document).ready(function(){
                 doAjax("get");
             }
             else {
-
             }
 
         }
