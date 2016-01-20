@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
   end
 
   def instagram_client
-    @instagram_client ||= Instagram.client( access_token: accesstoken )
+    @instagram_client ||= Instagram.client(access_token: accesstoken)
   end
 
 end
