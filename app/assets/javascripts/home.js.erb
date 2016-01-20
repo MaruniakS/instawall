@@ -1,9 +1,9 @@
 var main = function() {
-    var hash_tags = [];
-    var pagination = "";
-    var photos_id_array = [];
-    var type ="";
-    function appendPhotos(data){
+    var hash_tags = []; //entered hashtags
+    var pagination = ""; //next pages info
+    var photos_id_array = []; //avoid repetitions
+    var type =""; //тип запиту
+    function appendPhotos(data){ //appending function
         if ((type === "get")|| (type = "load_more_tag")){
             if ('hash_tags' in data){
                 hash_tags = data['hash_tags'];
@@ -29,7 +29,7 @@ var main = function() {
         }
     }
 
-    function doAjax(){
+    function doAjax(){ //requests function
         var ajax_url = "";
         if (type === "get"){
             ajax_url = "http://localhost:3000/home/get_photos?tag="+hash_tags[0];
@@ -63,7 +63,7 @@ var main = function() {
     }
 
 
-   $('#srch-btn').click(function(){
+   $('#srch-btn').click(function(){ //find button click
        $('#photos-panel').html("");
        photos_id_array = [];
        var tags_string = $('#hash-input').val();
@@ -76,7 +76,7 @@ var main = function() {
        doAjax();
    });
 
-    $('.btn-tag').click(function(){
+    $('.btn-tag').click(function(){ //hashtags history click
         $('#photos-panel').html("");
         photos_id_array = [];
         hash_tags = [$.trim($(this).text())];//.split(/[# ]/).filter(Boolean);
@@ -85,14 +85,14 @@ var main = function() {
         doAjax();
     });
 
-    $('#recent-media').click(function(){
+    $('#recent-media').click(function(){ // recent media click
         $('#photos-panel').html("");
         photos_id_array = [];
         type = "get_recent";
         doAjax();
     });
 
-    $(window).scroll(function()
+    $(window).scroll(function() //endless scrolling
     {
         if($(window).scrollTop() == $(document).height() - $(window).height())
         {
