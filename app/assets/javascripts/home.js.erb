@@ -2,11 +2,18 @@ $(document).ready(function(){
     var hash_tags = [];
     var pagination = "";
     var photos_id_array = [];
+    var type ="";
     function appendPhotos(data){
-        if ('hash_tags' in data){
-            hash_tags = data['hash_tags'];
+        if ((type === "get")|| (type = "load_more_tag")){
+            if ('hash_tags' in data){
+                hash_tags = data['hash_tags'];
+            }
         }
         pagination = data['pagination'];
+        if (data['meta']['code'] !== 200){
+            $('#photos-panel').append($('<div>', {class: 'alert alert-danger', text: 'API limit reached or your\'s request was bad!\nTry later'}));
+            return;
+        }
         data = data['photos'];
         if (data.length < 1){
             $('#photos-panel').append($('<div>', {class: 'text-info', text: 'No photos'}));
@@ -17,22 +24,28 @@ $(document).ready(function(){
                 $('#photos-panel').append(
                     $('<img>', {class: "img-thumbnail photos", src: data[i]['images']['standard_resolution']['url']})
                 );
+                $('#photos-panel').append($('<div>', {text: data[i]["caption"]["text"], class: "text-primary", style: "margin-bottom: 10px"}));
             }
         }
     }
 
-    function doAjax(type){
+    function doAjax(){
         var ajax_url = "";
         if (type === "get"){
             ajax_url = "http://localhost:3000/home/get_photos?tag="+hash_tags[0];
         }
-        else
+        else if (type==="load_more_tag")
         {
             ajax_url = "http://localhost:3000/home/get_photos?tag="+hash_tags[0]+"&max_id="+pagination['next_max_id'];
         }
+        else if (type === "get_recent"){
+            ajax_url = "http://localhost:3000/home/recent_media"
+        }
+        else {
+            ajax_url = "http://localhost:3000/home/recent_media?max_id="+pagination['next_max_id'];
+        }
         if (!$('#loading').length){
             $('#photos-panel').append('<img id="loading" src="<%= asset_path('loading.gif') %>"/>');
-            //$('#photos-panel').append($('<div>', {id: 'loading', text: 'Loading...', style: "margin-top: 20px"}));
         }
         $.ajax({
             url: ajax_url,
@@ -43,7 +56,7 @@ $(document).ready(function(){
                 appendPhotos(data);
             },
             error: function(){
-                $('#photos-panel').html($('<div>', { text: "Something went wrong. Wrong hashtag! ", class: "alert alert-danger"}));
+                $('#photos-panel').html($('<div>', { text: "Something went wrong. Wrong hashtag or you did not sign in. ", class: "alert alert-danger"}));
             }
 
         });
@@ -54,13 +67,23 @@ $(document).ready(function(){
        photos_id_array = [];
        var tags_string = $('#hash-input').val();
        hash_tags = tags_string.split(/[# ]/).filter(Boolean);
-       doAjax("get");
+       type = "get";
+       doAjax();
    });
 
     $('.btn-tag').click(function(){
         $('#photos-panel').html("");
+        photos_id_array = [];
         hash_tags = [$.trim($(this).text())];//.split(/[# ]/).filter(Boolean);
-        doAjax("get");
+        type = "get";
+        doAjax();
+    });
+
+    $('#recent-media').click(function(){
+        $('#photos-panel').html("");
+        photos_id_array = [];
+        type = "get_recent";
+        doAjax();
     });
 
     $(window).scroll(function()
@@ -68,11 +91,13 @@ $(document).ready(function(){
         if($(window).scrollTop() == $(document).height() - $(window).height())
         {
             if ('next_max_id' in pagination){
-                doAjax("load");
+                type = ((type === "get") ? "load_more_tag" : "load_more_recent");
+                doAjax();
             }
             else if (hash_tags.length > 1){
                 hash_tags.shift();
-                doAjax("get");
+                type = "get";
+                doAjax();
             }
             else {
             }

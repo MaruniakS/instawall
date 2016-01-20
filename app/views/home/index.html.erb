@@ -31,37 +31,43 @@
       </div>
     </div>
 
+    <% if user_signed_in? %>
+        <div class = "panel panel-info">
+            <div class = "panel-heading">
+                <h3 class = "panel-title">
+                    Your hashtags history
+                </h3>
+            </div>
+            <div class = "panel-body" id="user-history-panel">
+                <ul>
+                    <% current_user.tags.order(:created_at => :desc).each do |h| %>
+                        <li >
+                            <button class="btn btn-link btn-tag" style="padding: 0px">
+                                <%=  h.name %>
+                            </button>
+                        </li>
+                    <% end %>
+                </ul>
+            </div>
+        </div>
+    <% end %>
 
     <div class = "panel panel-info">
       <div class = "panel-heading">
         <h3 class = "panel-title">
-          <% if user_signed_in? %>
-            Your hashtags history
-          <% else %>
-            Popular hashtags
-          <% end %>
+          Popular hashtags
         </h3>
       </div>
-      <div class = "panel-body" id="history-panel">
-        <% if user_signed_in? %>
-            <ul>
-              <% current_user.tags.order(:created_at => :desc).each do |h| %>
-                <li >
-                  <button class="btn btn-link btn-tag" style="padding: 0px">
-                     <%=  h.name %>
-                  </button>
-                </li>
-              <% end %>
-            </ul>
-        <% else %>
-            <ul>
-              <% Tag.order(:count => :desc).each do |h| %>
-                  <a class="btn-tag">
-                    <%=  h.name %>
-                  </a>
-              <% end %>
-            </ul>
-        <% end %>
+      <div class = "panel-body" id="hashtags-history-panel">
+        <ul>
+          <% Tag.order(:count => :desc).each do |h| %>
+              <li >
+                <button class="btn btn-link btn-tag" style="padding: 0px">
+                  <%=  h.name %>
+                </button>
+              </li>
+          <% end %>
+        </ul>
       </div>
     </div>
 
