@@ -45,6 +45,7 @@ class HomeController < ApplicationController
 
   def save_tag(tag_name)
     return if !user_signed_in?
+    return if (tag_name.nil? || tag_name.empty?)
       tag = Tag.find_by_name(tag_name)
       if tag.nil?
         tag = Tag.create(name: tag_name)
