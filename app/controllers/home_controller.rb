@@ -4,7 +4,7 @@ class HomeController < ApplicationController
   end
 
   def tags
-    render :partial => 'shared/tags'
+    render :partial => 'shared/tags',:formats => :html
   end
 
   def get_photos
