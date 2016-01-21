@@ -4,6 +4,11 @@
         var pagination = ""; //next pages info
         var photos_id_array = []; //avoid repetitions
         var type ="";
+        function appendImage(url){
+            $('#photos-panel').append(
+               $('<img>', {class: "img-thumbnail photos", src: url})
+            );
+        }
         function appendPhotos(data){ //appending function
             if ((type === "get")|| (type === "load_more_tag")){
                 if ('hash_tags' in data){
@@ -16,20 +21,23 @@
                 return;
             }
             data = data['photos'];
-            if ((data.length < 1) && ($('#photos-panel').children().last().attr('id') === 'tag_name')){
+            if (data.length < 1)
+                if (($('#photos-panel').children().last().attr('id') === 'tag_name') || (type === 'get_recent')){
                 $('#photos-panel').append($('<div>', {class: 'text-info', text: 'No photos'}));
             }
             for (var i = 0; i < data.length; i++){
-                if ($.inArray(data[i]['caption']['id'], photos_id_array) === -1) {
-                    photos_id_array.push(data[i]['caption']['id']);
-                    $('#photos-panel').append(
-                            $('<img>', {class: "img-thumbnail photos", src: data[i]['images']['standard_resolution']['url']})
-                    );
-                    $('#photos-panel').append($('<div>', {text: data[i]["caption"]["text"], class: "text-primary", style: "margin-bottom: 10px"}));
+                var url = data[i]['images']['standard_resolution']['url'];
+                if (data[i]['caption'] !== null){
+                    if ($.inArray(data[i]['caption']['id'], photos_id_array) === -1) {
+                        photos_id_array.push(data[i]['caption']['id']);
+                        appendImage(url)
+                        $('#photos-panel').append($('<div>', {text: data[i]["caption"]["text"], class: "text-primary", style: "margin-bottom: 10px"}));
+                    }
                 }
+                else
+                appendImage(url);
+
             }
-            if ($('#photos-panel > *').length < 1)
-                $('#photos-panel').append($('<div>', {class: 'text-info', text: 'No photos'}));
         }
 
         function renderTags(){
@@ -117,7 +125,7 @@
             if($(window).scrollTop() == $(document).height() - $(window).height())
             {
                 if ('next_max_id' in pagination){
-                    type = ((type === "get") ? "load_more_tag" : "load_more_recent");
+                    type = (((type === "get") || (type === "load_more_tag")) ? "load_more_tag" : "load_more_recent");
                     doAjax();
                 }
                 else if (hash_tags.length > 1){
