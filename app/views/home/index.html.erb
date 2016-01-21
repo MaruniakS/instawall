@@ -16,7 +16,7 @@
                 return;
             }
             data = data['photos'];
-            if (((data.length < 1) && ($('#photos-panel').children().last().attr('id') === 'tag_name')) ||  ($('#photos-panel').children().length === 0)){
+            if (((data.length < 1) && ($('#photos-panel').children().last().attr('id') === 'tag_name')) ||  (($('#photos-panel').children().length === 0) && (type === "get_recent"))){
                 $('#photos-panel').append($('<div>', {class: 'text-info', text: 'No photos'}));
             }
             for (var i = 0; i < data.length; i++){
