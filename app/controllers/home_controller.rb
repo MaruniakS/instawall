@@ -29,18 +29,6 @@ class HomeController < ApplicationController
     render json: Cache.add_to_cache(current_user.id, request.original_url, result(media))
   end
 
-  def tmp
-    hash_tags = ['nat']
-    media = current_user.instagram_client.tag_recent_media('nature')
-    result = {
-        #'hash_tags' => hash_tags,
-        'pagination' => media.pagination,
-        'meta' => media.meta,
-        'data' => media
-    }
-    render json: result(media)
-  end
-
   private
   def result(media)
     res = {

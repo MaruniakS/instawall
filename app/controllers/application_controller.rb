@@ -6,7 +6,4 @@ class ApplicationController < ActionController::Base
   def init_cache
     Cache.init_cache
   end
-  def get_cache
-    Cache.get_cache
-  end
 end

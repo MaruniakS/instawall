@@ -90,8 +90,7 @@
             doAjax();
             renderTags();
         });
-
-        $('.btn-tag').click(function(){ //hashtags history click
+        $(document).on("click", ".btn-tag", function(e){
             $('#photos-panel').html("");
             photos_id_array = [];
             hash_tags = [$.trim($(this).text())];//.split(/[# ]/).filter(Boolean);
