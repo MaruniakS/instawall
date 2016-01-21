@@ -5,7 +5,7 @@
         var photos_id_array = []; //avoid repetitions
         var type ="";
         function appendPhotos(data){ //appending function
-            if ((type === "get")|| (type = "load_more_tag")){
+            if ((type === "get")|| (type === "load_more_tag")){
                 if ('hash_tags' in data){
                     hash_tags = data['hash_tags'];
                 }
@@ -16,7 +16,7 @@
                 return;
             }
             data = data['photos'];
-            if (((data.length < 1) && ($('#photos-panel').children().last().attr('id') === 'tag_name')) ||  (($('#photos-panel').children().length === 0) && (type === "get_recent"))){
+            if ((data.length < 1) && ($('#photos-panel').children().last().attr('id') === 'tag_name')){
                 $('#photos-panel').append($('<div>', {class: 'text-info', text: 'No photos'}));
             }
             for (var i = 0; i < data.length; i++){
@@ -28,6 +28,8 @@
                     $('#photos-panel').append($('<div>', {text: data[i]["caption"]["text"], class: "text-primary", style: "margin-bottom: 10px"}));
                 }
             }
+            if ($('#photos-panel > *').length < 1)
+                $('#photos-panel').append($('<div>', {class: 'text-info', text: 'No photos'}));
         }
 
         function renderTags(){
