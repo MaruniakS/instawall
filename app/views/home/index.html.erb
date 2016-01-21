@@ -16,7 +16,7 @@
                 return;
             }
             data = data['photos'];
-            if (((data.length < 1) && ($('#photos-panel').children().last().attr('id') === 'tag_name')) ||  ($('#photos-panel').children().length === 0)){
+            if (((data.length < 1) && ($('#photos-panel').children().last().attr('id') === 'tag_name')) ||  (($('#photos-panel').children().length === 0) && (type === "get_recent"))){
                 $('#photos-panel').append($('<div>', {class: 'text-info', text: 'No photos'}));
             }
             for (var i = 0; i < data.length; i++){
@@ -105,8 +105,8 @@
             doAjax();
         });
 
-        $(window).scroll(function() //endless scrolling
-        {
+        $(window).scroll(function(){ //endless scrolling
+
             if($(window).scrollTop() == $(document).height() - $(window).height())
             {
                 if ('next_max_id' in pagination){
@@ -124,10 +124,15 @@
             }
         });
     };
+    $("#hash-input").keyup(function(event){
+        if(event.keyCode == 13){
+            $("#srch-btn").click();
+        }
+    });
     $(document).ready(main);
     $(document).on('page:load', main);
 </script>
-<div class="modal-body row">
+<div>
   <div class="col-md-9">
     <div class = "panel panel-default">
       <div class = "panel-heading">
@@ -148,15 +153,15 @@
         </h3>
       </div>
       <div class = "panel-body" id = "search-panel">
-         <div class="form-group">
-           <div class="input-group">
-             <input type="text" id="hash-input" class = "form-control", placeholder="Hashtags"/>
+        <div class="form-group">
+          <div class="input-group">
+            <input type="text" id="hash-input" class = "form-control", placeholder="Hashtags"/>
                 <span class="input-group-btn">
                   <input value="Find" id="srch-btn" type="button" class="btn btn-primary" />
                  </span>
-              </div>
-            <span class="help-block"><em>Enter one or more hashtags</em></span>
-         </div>
+          </div>
+          <span class="help-block"><em>Enter one or more hashtags</em></span>
+        </div>
       </div>
     </div>
     <div id="tags">
