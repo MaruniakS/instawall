@@ -45,11 +45,13 @@ class HomeController < ApplicationController
       tag = Tag.find_by_name(tag_name)
       if tag.nil?
         tag = Tag.create(name: tag_name)
-        UserTag.create(user: current_user, tag: tag)
       else
         tag.count += 1
         tag.save!
       end
+    if UserTag.find_by_user_id_and_tag_id(user: current_user.id, tag: tag).nil?
+      UserTag.create(user: current_user, tag: tag)
+    end
   end
 end
 
