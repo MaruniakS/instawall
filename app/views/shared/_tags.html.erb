@@ -7,7 +7,7 @@
       </div>
       <div class = "panel-body" id="user-history-panel">
         <ul>
-          <% current_user.tags.order(:updated_at => :desc).each do |h| %>
+          <% current_user.tags.order('updated_at DESC').limit(10).each do |h| %>
               <li >
                 <button class="btn btn-link btn-tag" style="padding: 0px">
                   <%=  h.name %>
@@ -27,7 +27,7 @@
   </div>
   <div class = "panel-body" id="hashtags-history-panel">
     <ul>
-      <% Tag.order(:count => :desc).each do |h| %>
+      <% Tag.select('tags.*').joins(:user_tags).group('tags.id').having('count(user_tags.id) > 2').each do |h| %>
           <li >
             <button class="btn btn-link btn-tag" style="padding: 0px">
               <%=  h.name %>
