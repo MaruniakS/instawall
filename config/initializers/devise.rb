@@ -236,7 +236,7 @@ Devise.setup do |config|
   config.sign_out_via = :delete
 
   # ==> OmniAuth
-  config.omniauth :instagram, 	'bc238aa46fb84bdb8877abb23e503512', 	'40b76427c4d54043a64ca90383346677'
+  config.omniauth :instagram, 	'bc238aa46fb84bdb8877abb23e503512', 	'40b76427c4d54043a64ca90383346677', {:scope => 'public_content'}
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'

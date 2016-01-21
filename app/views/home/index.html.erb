@@ -1,3 +1,132 @@
+<script>
+    var main = function() {
+        var hash_tags = []; //entered hashtags
+        var pagination = ""; //next pages info
+        var photos_id_array = []; //avoid repetitions
+        var type ="";
+        function appendPhotos(data){ //appending function
+            if ((type === "get")|| (type = "load_more_tag")){
+                if ('hash_tags' in data){
+                    hash_tags = data['hash_tags'];
+                }
+            }
+            pagination = data['pagination'];
+            if (data['meta']['code'] !== 200){
+                $('#photos-panel').append($('<div>', {class: 'alert alert-danger', text: 'API limit reached or your\'s request was bad!\nTry later'}));
+                return;
+            }
+            data = data['photos'];
+            if (((data.length < 1) && ($('#photos-panel').children().last().attr('id') === 'tag_name')) ||  ($('#photos-panel').children().length === 0)){
+                $('#photos-panel').append($('<div>', {class: 'text-info', text: 'No photos'}));
+            }
+            for (var i = 0; i < data.length; i++){
+                if ($.inArray(data[i]['caption']['id'], photos_id_array) === -1) {
+                    photos_id_array.push(data[i]['caption']['id']);
+                    $('#photos-panel').append(
+                            $('<img>', {class: "img-thumbnail photos", src: data[i]['images']['standard_resolution']['url']})
+                    );
+                    $('#photos-panel').append($('<div>', {text: data[i]["caption"]["text"], class: "text-primary", style: "margin-bottom: 10px"}));
+                }
+            }
+        }
+
+        function renderTags(){
+            $.ajax({
+                url: "<%= home_tags_path %>",
+                success: function(data){
+                    $('#tags').html(data);
+                }
+            });
+        }
+
+        function doAjax(){ //requests function
+            var ajax_url = "";
+            var ajax_data = {};
+            if (type === "get"){
+                ajax_url = "<%= home_get_photos_path %>";
+                ajax_data = {tag: hash_tags[0]};
+            }
+            else if (type==="load_more_tag")
+            {
+                ajax_url = "<%= home_get_photos_path %>";
+                ajax_data = {tag: hash_tags[0], max_id: pagination['next_max_id']};
+            }
+            else if (type === "get_recent"){
+                ajax_url = "<%= home_recent_media_path %>"
+            }
+            else {
+                ajax_url = "<%= home_recent_media_path %>";
+                ajax_data = {max_id: pagination['next_max_id']};
+            }
+            if (!$('#loading').length){
+                $('#photos-panel').append('<img id="loading" src="<%= asset_path('loading.gif') %>"/>');
+            }
+            $.ajax({
+                url: ajax_url,
+                data: ajax_data,
+                dataType: 'json',
+                success: function(data){
+                    $('#loading').remove();
+                    if (type === "get") {$('#photos-panel').append($('<h3>', {text: '#'+hash_tags[0], class: 'text-info', id: "tag_name", style: 'margin-top:20px'}));}
+                    appendPhotos(data);
+                },
+                error: function(){
+                    $('#photos-panel').html($('<div>', { text: "Something went wrong. Wrong hashtag or you did not sign in. ", class: "alert alert-danger"}));
+                }
+
+            });
+        }
+
+        $('#srch-btn').click(function(){ //find button click
+            $('#photos-panel').html("");
+            photos_id_array = [];
+            var tags_string = $('#hash-input').val();
+            hash_tags = tags_string.split(/[# ]/).filter(Boolean);
+            if (hash_tags.length < 1) {
+                $('#photos-panel').append($('<div>', {class: 'alert alert-warning', text: 'Enter hashtags first!'}));
+                return;
+            }
+            type = "get";
+            doAjax();
+            renderTags();
+        });
+        $(document).on("click", ".btn-tag", function(e){
+            $('#photos-panel').html("");
+            photos_id_array = [];
+            hash_tags = [$.trim($(this).text())];//.split(/[# ]/).filter(Boolean);
+            type = "get";
+            doAjax();
+        });
+
+        $('#recent-media').click(function(){ // recent media click
+            $('#photos-panel').html("");
+            photos_id_array = [];
+            type = "get_recent";
+            doAjax();
+        });
+
+        $(window).scroll(function() //endless scrolling
+        {
+            if($(window).scrollTop() == $(document).height() - $(window).height())
+            {
+                if ('next_max_id' in pagination){
+                    type = ((type === "get") ? "load_more_tag" : "load_more_recent");
+                    doAjax();
+                }
+                else if (hash_tags.length > 1){
+                    hash_tags.shift();
+                    type = "get";
+                    doAjax();
+                }
+                else {
+                }
+
+            }
+        });
+    };
+    $(document).ready(main);
+    $(document).on('page:load', main);
+</script>
 <div class="modal-body row">
   <div class="col-md-9">
     <div class = "panel panel-default">
@@ -6,7 +135,7 @@
           Photos
         </h3>
       </div>
-      <div class = "panel-body" id = "main-panel">
+      <div class = "panel-body" id = "photos-panel" style="text-align: center">
       </div>
     </div>
   </div>
@@ -18,33 +147,31 @@
 
         </h3>
       </div>
-      <div class = "panel-body" id = "main-panel">
-        <%= form_for :person do |f| %>
-            <div class="form-group">
-              <div class="input-group">
-                <%= f.text_field :first_name, class: 'form-control', placeholder: 'Hashtags' %>
-                    <span class="input-group-btn">
-                     <%= f.submit 'Find', class: 'btn btn-primary', style: 'float: right' %>
-                    </span>
+      <div class = "panel-body" id = "search-panel">
+         <div class="form-group">
+           <div class="input-group">
+             <input type="text" id="hash-input" class = "form-control", placeholder="Hashtags"/>
+                <span class="input-group-btn">
+                  <input value="Find" id="srch-btn" type="button" class="btn btn-primary" />
+                 </span>
               </div>
-              <span class="help-block">Enter one or more hashtags</span>
-            </div>
-        <% end %>
+            <span class="help-block"><em>Enter one or more hashtags</em></span>
+         </div>
       </div>
     </div>
-
-
-    <div class = "panel panel-info">
-      <div class = "panel-heading">
-        <h3 class = "panel-title">
-          Your hashtags history
-        </h3>
-      </div>
-      <div class = "panel-body" id = "main-panel">
-
-      </div>
+    <div id="tags">
+      <%= render 'shared/tags' %>
     </div>
+
 
   </div>
 </div>
+
+<style>
+    .photos{
+        height: 600px;
+        width: 600px;
+        margin-top: 20px;
+    }
+</style>
 
