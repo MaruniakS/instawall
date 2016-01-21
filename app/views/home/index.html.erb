@@ -104,6 +104,11 @@
             type = "get_recent";
             doAjax();
         });
+        $("#hash-input").keyup(function(event){
+            if(event.keyCode == 13){
+                $("#srch-btn").click();
+            }
+        });
 
         $(window).scroll(function(){ //endless scrolling
 
@@ -124,11 +129,7 @@
             }
         });
     };
-    $("#hash-input").keyup(function(event){
-        if(event.keyCode == 13){
-            $("#srch-btn").click();
-        }
-    });
+
     $(document).ready(main);
     $(document).on('page:load', main);
 </script>
