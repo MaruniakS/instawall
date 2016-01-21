@@ -30,23 +30,32 @@
             }
         }
 
+        function renderTags(){
+            $.ajax({
+                url: "<%= home_tags_path %>",
+                success: function(data){
+                    $('#tags').html(data);
+                }
+            });
+        }
+
         function doAjax(){ //requests function
             var ajax_url = "";
             var ajax_data = {};
             if (type === "get"){
-                ajax_url = "/home/get_photos";
+                ajax_url = "<%= home_get_photos_path %>";
                 ajax_data = {tag: hash_tags[0]};
             }
             else if (type==="load_more_tag")
             {
-                ajax_url = "/home/get_photos";
+                ajax_url = "<%= home_get_photos_path %>";
                 ajax_data = {tag: hash_tags[0], max_id: pagination['next_max_id']};
             }
             else if (type === "get_recent"){
-                ajax_url = "/home/recent_media"
+                ajax_url = "<%= home_recent_media_path %>"
             }
             else {
-                ajax_url = "/home/recent_media";
+                ajax_url = "<%= home_recent_media_path %>";
                 ajax_data = {max_id: pagination['next_max_id']};
             }
             if (!$('#loading').length){
@@ -79,7 +88,7 @@
             }
             type = "get";
             doAjax();
-            $('#tags').html("<%= escape_javascript(render partial: 'shared/tags' ) %>");
+            renderTags();
         });
 
         $('.btn-tag').click(function(){ //hashtags history click

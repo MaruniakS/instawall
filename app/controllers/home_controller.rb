@@ -3,6 +3,10 @@ class HomeController < ApplicationController
   def index
   end
 
+  def tags
+    render :partial => 'shared/tags'
+  end
+
   def get_photos
     tag_name = params[:tag]
     max_id = params[:max_id]
