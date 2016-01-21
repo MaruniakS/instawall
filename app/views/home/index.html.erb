@@ -124,6 +124,11 @@
             }
         });
     };
+    $("#hash-input").keyup(function(event){
+        if(event.keyCode == 13){
+            $("#id_of_button").click();
+        }
+    });
     $(document).ready(main);
     $(document).on('page:load', main);
 </script>
